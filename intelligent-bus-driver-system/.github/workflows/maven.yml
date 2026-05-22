@@ -1,0 +1,3 @@
+name: GitHub Actions Java test workflow
+run-name: Running tests on github actions
+on: [push]

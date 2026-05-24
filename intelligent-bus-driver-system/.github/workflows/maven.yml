@@ -1,3 +1,18 @@
-name: GitHub Actions Java test workflow
+name: Github Intelligent Bus Workflow
 run-name: Running tests on github actions
 on: [push]
+jobs:
+  java-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+
+      - name: Run tests
+        run: mvn test

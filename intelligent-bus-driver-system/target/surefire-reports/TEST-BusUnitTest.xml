@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="AU"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-26.0.1\bin"/>
-    <property name="sun.java.command" value="C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire2129563245202107600\surefirebooter-20260522185120059_3.jar C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire2129563245202107600 2026-05-22T18-51-19_963-jvmRun1 surefire-20260522185120059_1tmp surefire_0-20260522185120059_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire18054331365328917871\surefirebooter-20260522193629676_3.jar C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire18054331365328917871 2026-05-22T19-36-29_578-jvmRun1 surefire-20260522193629676_1tmp surefire_0-20260522193629676_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="c:\Users\Adam Dimkovski\Downloads\Year 2\Software Engineer Fundamentals\Assignment4\intelligent-bus-driver-system\intelligent-bus-driver-system\target\test-classes;c:\Users\Adam Dimkovski\Downloads\Year 2\Software Engineer Fundamentals\Assignment4\intelligent-bus-driver-system\intelligent-bus-driver-system\target\classes;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire2129563245202107600\surefirebooter-20260522185120059_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Adam Dimkovski\AppData\Local\Temp\surefire18054331365328917871\surefirebooter-20260522193629676_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="26.0.1+8-34"/>

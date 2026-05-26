@@ -1,8 +1,13 @@
 package com;
 
+// For formatting driver age
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Stream;
 
 /**
  * Represents a bus in the system
@@ -17,10 +22,10 @@ public class Bus {
 
     // Basic Constructor (Variable names subject to change)
     public Bus(String busID, int capacity, double fuelLevel, String fuelType) {
-        this.busID = busID;
-        this.capacity = capacity;
-        this.fuelLevel = fuelLevel;
-        this.fuelType = fuelType;
+        busID = this.busID;
+        capacity = this.capacity;
+        fuelLevel = this.fuelLevel;
+        fuelType = this.fuelType;
     }
 
     // Getter: Returns busID
@@ -28,16 +33,43 @@ public class Bus {
         return this.busID;
     }
 
+    // B1.1: All BusID must be unique, No busID can be Duplicates
     // B1.2: The busID must be exactly 8 characters long, all characters must be digits
     // Setter: Sets/Updates BusID
     public void setBusID(String busString) {
+        // First, validate the format (8 digits)
+        if (busString == null || busString.length() != 8 || !busString.matches("\\d+")) {
+            throw new IllegalArgumentException("BusID Invalid: must be exactly 8 digits");
+        }
+        
+        // Check if this busID already exists in the file (only if it's different from current busID)
+        if (!busString.equals(this.busID) && busIDExists(busString)) {
+            throw new IllegalArgumentException("BusID already exists: " + busString);
+        }
+        
+        // If all validations pass, set the busID
+        this.busID = busString;
+    }
 
-        // Checks that busString contains 8 characters and is fully digits. (B1.2)
-        if (busString.length() == 8 && busString.matches("\\d+")) {
-            this.busID = busString; }
-
-        // Handles Invalid BusID
-        else { System.out.println("BusID Invalid"); }
+    // Helper method to check if a busID already exists in the file
+    private boolean busIDExists(String busID) {
+        String busesData = "data/buses.txt";
+        
+        try (Stream<String> stream = Files.lines(Paths.get(busesData))) {
+            return stream.anyMatch(line -> {
+                String[] parts = line.split(",");
+                if (parts.length > 0) {
+                    String existingBusID = parts[0].replace("busID ", "").trim();
+                    return existingBusID.equals(busID);
+                }
+                return false;
+            });
+        } 
+        catch (IOException e) {
+            // If file doesn't exist or can't be read, assume no duplicates
+            System.err.println("Warning: Could not read buses file: " + e.getMessage());
+            return false;
+        }
     }
 
     // Getter: Returns capacity
@@ -57,7 +89,7 @@ public class Bus {
         int driverAge = Period.between(driverBirthDate, currentDate).getYears();
         
         // Checks to see if capacity is greater than 50
-        if(capacity >= 50) {
+        if(busSpace >= 50) {
 
             // Capacity >= 50 and checks if drivers age is less then 50 (B3)
             if(driverAge < 50) {
@@ -98,8 +130,7 @@ public class Bus {
         }
 
         // Checks to see if Drivers are able to operate buses
-        else if (TypeOfFuel.equalsIgnoreCase("Hybrid")
-        || TypeOfFuel.equalsIgnoreCase("Electricity")) {
+        else if (TypeOfFuel.equalsIgnoreCase("Hybrid")) {
             
             // Checks to see if driver has correct liscense type (B5)
             if (driver.getlicenceType().equals("Heavy") || driver.getlicenceType().equals("Public Transport")) {
@@ -125,16 +156,14 @@ public class Bus {
                 throw new IllegalArgumentException("Driver needs 5 or more years experience to operate electric buses");    
                 }
             }
-            // If driver does not have right liscence type
-            else {
-            throw new IllegalArgumentException("Driver Liscense Invalid");    
-            }
             
         }
+
+        // If driver does not have right liscence type
+        else { throw new IllegalArgumentException("Driver Liscense Invalid"); }
     }
 }
 
-    // Condition B1.1: BusID must be unique. Duplicate bus IDs are not allowed
     // Condition B2: busCapacity cannot increase during update operations. However, it can decrease
 
 

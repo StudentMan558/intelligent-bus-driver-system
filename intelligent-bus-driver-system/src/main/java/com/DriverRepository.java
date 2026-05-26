@@ -1,4 +1,4 @@
-package com.busdriver;
+package com;
 
 /**
  * Repository for managing driver data persistence

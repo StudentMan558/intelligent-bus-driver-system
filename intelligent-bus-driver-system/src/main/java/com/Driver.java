@@ -1,8 +1,8 @@
-package com.busdriver;
+package com;
 
 /**
  * Represents a bus driver in the system
- * @author [Team Member Names]
+ * @author [Jake Mastandrea]
  */
 public class Driver {
     private String driverID;

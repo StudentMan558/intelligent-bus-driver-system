@@ -1,5 +1,5 @@
 
-package com.busdriver;
+package com;
 
 /**
  * Represents a bus in the system

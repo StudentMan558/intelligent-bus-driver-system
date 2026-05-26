@@ -1,4 +1,3 @@
-
 package com;
 
 /**
@@ -17,10 +16,10 @@ public class Bus {
 
     // Basic Constructor (Variable names subject to change)
     public Bus(String busID, int capacity, double fuelLevel, String fuelType) {
-        setBusID(busID);
-        setCapacity(capacity);
-        setFuelLevel(fuelLevel);
-        setFuelType(fuelType);
+        this.busID = busID;
+        this.capacity = capacity;
+        this.fuelLevel = fuelLevel;
+        this.fuelType = fuelType;
     }
 
     // Getter: Returns busID

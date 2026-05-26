@@ -23,6 +23,8 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>intelligent-bus-driver-system/src/main/java</sourceDirectory>
+        <testSourceDirectory>intelligent-bus-driver-system/src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

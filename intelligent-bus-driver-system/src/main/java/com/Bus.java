@@ -1,7 +1,6 @@
 
 package com.busdriver;
 
-
 /**
  * Represents a bus in the system
  * @author Adam Dimkovski (s4168373)
@@ -31,7 +30,13 @@ public class Bus {
 
     // Setter: Sets/Updates BusID
     public void setBusID(String busString) {
-        this.busID = busString;
+
+        // Checks that busString contains 8 characters and is fully digits.
+        if (busString.length() == 8 && busString.matches("\\d+")) {
+            this.busID = busString; }
+
+        // Handles Invalid BusID
+        else { System.out.println("BusID Invalid"); }
     }
 
     // Getter: Returns capacity
@@ -45,7 +50,7 @@ public class Bus {
     }
 
     // Getter: Returns fuelLevel
-    public double setFuelLevel() {
+    public double getFuelLevel() {
         return this.fuelLevel;
     }
 
@@ -55,13 +60,22 @@ public class Bus {
     }
 
     // Getter: Returns fuelType
-    public double setFuelType() {
+    public String getFuelType() {
         return this.fuelType;
     }
 
     // Setter: Sets/Updates FuelType 
     public void setFuelType(String TypeOfFuel) {
-        this.fuelType = TypeOfFuel;
+
+        // Checks for appropriate fuel types
+        if(TypeOfFuel.equalsIgnoreCase("Diesel") 
+        || TypeOfFuel.equalsIgnoreCase("Hybrid")
+        || TypeOfFuel.equalsIgnoreCase("Electricity")) {
+            this.fuelType = TypeOfFuel;
+        }
+
+        // Handles Invalid Fuel Types
+        else { System.out.println("Fuel Type Invalid"); }
     }
 
 }

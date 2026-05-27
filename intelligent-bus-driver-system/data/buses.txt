@@ -1,1 +1,1 @@
-busID 12345678,capacity 200L,fuelLevel 50L, fuelType diesel
+busID 12345678, capacity 200, fuelLevel 50L, fuelType diesel

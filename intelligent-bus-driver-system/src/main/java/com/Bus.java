@@ -22,10 +22,10 @@ public class Bus {
 
     // Basic Constructor (Variable names subject to change)
     public Bus(String busID, int capacity, double fuelLevel, String fuelType) {
-        busID = this.busID;
-        capacity = this.capacity;
-        fuelLevel = this.fuelLevel;
-        fuelType = this.fuelType;
+        this.busID = busID;
+        this.capacity = capacity;
+        this.fuelLevel = fuelLevel;
+        this.fuelType = fuelType;
     }
 
     // Getter: Returns busID
@@ -46,31 +46,52 @@ public class Bus {
         if (!busString.equals(this.busID) && busIDExists(busString)) {
             throw new IllegalArgumentException("BusID already exists: " + busString);
         }
-        
+        else {
         // If all validations pass, set the busID
         this.busID = busString;
-    }
-
-    // Helper method to check if a busID already exists in the file
-    private boolean busIDExists(String busID) {
-        String busesData = "data/buses.txt";
-        
-        try (Stream<String> stream = Files.lines(Paths.get(busesData))) {
-            return stream.anyMatch(line -> {
-                String[] parts = line.split(",");
-                if (parts.length > 0) {
-                    String existingBusID = parts[0].replace("busID ", "").trim();
-                    return existingBusID.equals(busID);
-                }
-                return false;
-            });
-        } 
-        catch (IOException e) {
-            // If file doesn't exist or can't be read, assume no duplicates
-            System.err.println("Warning: Could not read buses file: " + e.getMessage());
-            return false;
         }
     }
+
+    // Helper method to check if a busID already exists in the file (B1.1)
+    private boolean busIDExists(String busString) {
+
+    String busesData = "data/buses.txt";
+
+    try (Stream<String> stream = Files.lines(Paths.get(busesData))) {
+
+        return stream.anyMatch(line -> {
+
+            line = line.trim();
+            System.out.println("Checking line: " + line);
+
+            // Check line starts correctly
+            if (!line.startsWith("busID")) {
+                return false;
+            }
+
+            // Split by commas
+            String[] parts = line.split(",");
+
+            // Extract first section
+            String firstPart = parts[0].trim();
+
+            // Remove "busID"
+            String existingBusID =
+                firstPart.replace("busID", "").trim();
+
+                System.out.println("Extracted ID: " + existingBusID);
+                System.out.println("Input ID: " + busString);
+
+            return existingBusID.equals(busString);
+        });
+
+    } catch (IOException e) {
+
+        throw new IllegalArgumentException(
+            "buses.txt file not found"
+        );
+    }
+}
 
     // Getter: Returns capacity
     public int getCapacity() {
@@ -92,15 +113,15 @@ public class Bus {
         if(busSpace >= 50) {
 
             // Capacity >= 50 and checks if drivers age is less then 50 (B3)
-            if(driverAge < 50) {
+            if(driverAge < 50 && driverAge > 0) {
                 this.capacity = busSpace;
             }
             else {
-                throw new IllegalArgumentException("Driver Age is 50 or Greater");  
+                throw new IllegalArgumentException("Driver Age must be 50 and Valid");  
             }
         }
         else {
-            // Passes capacity through if not greater then 50 for all drivers
+            // Passes capacity through if not greater then 50 all drivers can operate
             this.capacity = busSpace;
         }
     }
@@ -149,21 +170,25 @@ public class Bus {
             if (driver.getlicenceType().equals("Heavy") || driver.getlicenceType().equals("Public Transport")) {
 
                 // Checks if driver has adequete experience for electric bus (B4)
-                if (driver.getExperienceYears() > 5) {
+                if (driver.getExperienceYears() >= 5) {
                     this.fuelType = TypeOfFuel;
                 }
                 else {
                 throw new IllegalArgumentException("Driver needs 5 or more years experience to operate electric buses");    
                 }
             }
+            else {
+            // Throw Error if not Heavy or Public Transport license
+            throw new IllegalArgumentException("Drivers Liscense must be Heavy or Public Transport");
+            }
             
         }
-
         // If driver does not have right liscence type
         else { throw new IllegalArgumentException("Driver Liscense Invalid"); }
     }
 }
 
+    // TO DO:
     // Condition B2: busCapacity cannot increase during update operations. However, it can decrease
 
 

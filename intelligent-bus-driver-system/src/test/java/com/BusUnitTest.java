@@ -60,11 +60,39 @@ public class BusUnitTest {
     });
 }
     // Condition B2: busCapacity cannot increase during update operations. However, it can decrease
-    // Unit test Case 6: Capacity can increase
+    // Unit test Case 6: Capacity can decrease
+    @Test
+    public void testCapacityCanDecrease() {
+        Bus bus = new Bus("87654321", 100, 75.0, "Diesel");
+        Driver driver = new Driver("23aq!-dfIU", "John Doe", 10, "Heavy", "1  | Latrobe St | Melbourne | Victoria | Australia", "01-01-2000");
+        
+        // Decrease from 100 to 50 - should succeed
+        bus.setCapacity(50, driver);
+        assertEquals(50, bus.getCapacity());
+    }
 
     // Unit test Case 7: Capacity can stay same
+    @Test
+    public void testCapacityCanStaySame() {
+        Bus bus = new Bus("76543210", 50, 75.0, "Diesel");
+        Driver driver = new Driver("23aq!-dfIU", "John Doe", 10, "Heavy", "1  | Latrobe St | Melbourne | Victoria | Australia", "01-01-2000");
+        
+        // Keep at 50 - should succeed
+        bus.setCapacity(50, driver);
+        assertEquals(50, bus.getCapacity());
+    }
 
     // Unit test Case 8: Capacity cannot increase
+    @Test
+    public void testCapacityCannotIncrease() {
+        Bus bus = new Bus("65432109", 50, 75.0, "Diesel");
+        Driver driver = new Driver("23aq!-dfIU", "John Doe", 10, "Heavy", "1  | Latrobe St | Melbourne | Victoria | Australia", "01-01-1970");
+        
+        // Try to increase from 50 to 100 - should throw
+        assertThrows(IllegalArgumentException.class, () -> {
+            bus.setCapacity(100, driver);
+        });
+    }
 
     // Condition B3: Driver age must be less then 50 to drive buses with a capacity of 50 or more.
     // Unit test Case 9: Driver Under 50 Can Drive Large Bus

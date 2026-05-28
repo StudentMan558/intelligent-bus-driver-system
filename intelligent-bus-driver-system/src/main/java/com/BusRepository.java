@@ -1,10 +1,10 @@
 package com;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -199,7 +199,9 @@ public class BusRepository {
                 int existingCap     = Integer.parseInt(parts[1].split(" ")[1].trim());
 
                 if (existingID.equals(updated.getBusID())) {
-                    // Match found 
+
+                    // Condition B2: busCapacity cannot increase during update operations. However, it can decrease   
+                    // Match Found (B2) 
                     if (updated.getCapacity() > existingCap) {
                         throw new IllegalArgumentException(
                             "Bus capacity cannot be increased during an update.");

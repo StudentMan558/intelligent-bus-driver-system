@@ -1,6 +1,6 @@
 package com;
 
-// For formatting driver age
+// Imports used for Bus.java
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,13 +17,15 @@ import java.util.stream.Stream;
 public class Bus {
     private String busID;
     private int capacity;
+    final private int originalCapacity; // Tracks initial capacity for B2 constraint
     private double fuelLevel;
     private String fuelType; // Diesel, Hybrid, Electricity
 
-    // Basic Constructor (Variable names subject to change)
+    // Basic Constructor 
     public Bus(String busID, int capacity, double fuelLevel, String fuelType) {
         this.busID = busID;
         this.capacity = capacity;
+        this.originalCapacity = capacity; // Store original capacity for B2 enforcement
         this.fuelLevel = fuelLevel;
         this.fuelType = fuelType;
     }
@@ -101,6 +103,9 @@ public class Bus {
     // Setter: Sets/Updates Capacity
     public void setCapacity(int busSpace, Driver driver) {
 
+        // Condition B2: busCapacity cannot increase during update operations
+        validateCapacityIncrease(busSpace);
+
         // Condition B3: Driver age must be less then 50 to drive buses with a capacity of 50 or more. 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -117,12 +122,20 @@ public class Bus {
                 this.capacity = busSpace;
             }
             else {
-                throw new IllegalArgumentException("Driver Age must be 50 and Valid");  
+                throw new IllegalArgumentException("Driver Age must be less than 50 and Valid");  
             }
         }
         else {
             // Passes capacity through if not greater then 50 all drivers can operate
             this.capacity = busSpace;
+        }
+    }
+
+    // Helper method for Condition B2: Validates that capacity cannot increase
+    private void validateCapacityIncrease(int newCapacity) {
+        if (newCapacity > this.originalCapacity) {
+            throw new IllegalArgumentException(
+                "Bus capacity cannot be increased during an update. Original capacity: " + this.originalCapacity);
         }
     }
 
@@ -187,9 +200,6 @@ public class Bus {
         else { throw new IllegalArgumentException("Driver Liscense Invalid"); }
     }
 }
-
-    // TO DO:
-    // Condition B2: busCapacity cannot increase during update operations. However, it can decrease
 
 
 

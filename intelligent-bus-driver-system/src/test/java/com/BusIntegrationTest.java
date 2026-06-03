@@ -34,30 +34,12 @@ public class BusIntegrationTest {
         // Create the data folder if it does not already exist
         new File("data").mkdirs();
 
-        // Record how many entries already exist before we add test data
-        originalCount = busRepository.countBus();
+        // Delete the file before each test so we always start clean
+        new File("data\\buses.txt").delete();
 
         // Seed the file with a known bus entry to test against
         Bus seedBus = new Bus("12345678", 40, 85.5, "Diesel");
         busRepository.addBus(seedBus);
-    }
-
-    /**
-     * Reads all current entries, deletes the file, then rewrites
-     * only the original entries to remove any test data added.
-     */
-    @AfterEach
-    void tearDown() throws IOException {
-        // Read all current lines before deleting
-        List<Bus> allBuses = busRepository.retrieveAllBus();
-
-        // Delete the file
-        new File("data\\buses.txt").delete();
-
-        // Rewrite only up to the original count
-        for (int i = 0; i < originalCount; i++) {
-            busRepository.addBus(allBuses.get(i));
-        }
     }
 
     /**

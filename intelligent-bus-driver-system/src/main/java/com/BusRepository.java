@@ -1,10 +1,10 @@
 package com;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,6 @@ public class BusRepository {
 
                 // Check if this line matches the requested ID
                 if (id.equals(busID)) {
-                    // Create a fresh Bus object using the available constructor
                     return new Bus(id, capacity, fuelLevel, fuelType);
                 }
             }
@@ -108,16 +107,14 @@ public class BusRepository {
     /**
      * Reads every entry in buses.txt and returns them all
      * as a list of Bus objects.
-     * Throws an exception if the file is not found.
+     * Returns an empty list if the file does not exist.
      */
     public List<Bus> retrieveAllBus() throws IOException {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("buses.txt file not found.");
-        }
-
-        // List to hold every Bus object created from the file
         List<Bus> buses = new ArrayList<>();
+        File file = new File(FILE_PATH);
+
+        // If file doesn't exist yet return empty list instead of throwing
+        if (!file.exists()) return buses;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -133,7 +130,7 @@ public class BusRepository {
                 double fuelLevel = Double.parseDouble(parts[2].split(" ")[1].trim());
                 String fuelType  = parts[3].split(" ")[1].trim();
 
-                // Create a fresh Bus object for this entry using the available constructor
+                // Create a fresh Bus object for this entry and add to list
                 buses.add(new Bus(id, capacity, fuelLevel, fuelType));
             }
         }
@@ -145,13 +142,13 @@ public class BusRepository {
     /**
      * Reads through buses.txt and returns the total number
      * of entries as an integer.
-     * Throws an exception if the file is not found.
+     * Returns 0 if the file does not exist.
      */
     public int countBus() throws IOException {
         File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            throw new IllegalArgumentException("buses.txt file not found.");
-        }
+
+        // If file doesn't exist yet there are simply no entries
+        if (!file.exists()) return 0;
 
         // Counter to track the number of entries
         int count = 0;
@@ -168,8 +165,6 @@ public class BusRepository {
         // Return the total count
         return count;
     }
-
-    // ─── UPDATE ─────────────────────────────────────────────────────────────────
 
     /**
      * Takes a Bus object finds the matching entry in buses.txt by ID
@@ -194,14 +189,12 @@ public class BusRepository {
                 if (line.isBlank()) continue;
 
                 // Extract the ID from this line for comparison
-                String[] parts      = line.split(",");
-                String existingID   = parts[0].split(" ")[1].trim();
-                int existingCap     = Integer.parseInt(parts[1].split(" ")[1].trim());
+                String[] parts    = line.split(",");
+                String existingID = parts[0].split(" ")[1].trim();
+                int existingCap   = Integer.parseInt(parts[1].split(" ")[1].trim());
 
                 if (existingID.equals(updated.getBusID())) {
-
-                    // Condition B2: busCapacity cannot increase during update operations. However, it can decrease   
-                    // Match Found (B2) 
+                    // Match found enforce B2 before updating
                     if (updated.getCapacity() > existingCap) {
                         throw new IllegalArgumentException(
                             "Bus capacity cannot be increased during an update.");
@@ -214,7 +207,7 @@ public class BusRepository {
                                  ",fuelType " + updated.getFuelType());
                     matchFound = true;
                 } else {
-                    // No match so we keep the existing line unchanged
+                    // No match so keep the existing line unchanged
                     allLines.add(line);
                 }
             }

@@ -2,6 +2,9 @@ package com;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 public class BusUnitTest {
@@ -51,12 +54,14 @@ public class BusUnitTest {
 }
 
     // Unit test Case 5: Test that duplicate busID will be rejected and not allowed (e.g., if '12345678' is already used, will not allow '12345678' again.)
-    @Test
-    public void testDuplicateBusID() {
-        Bus bus = new Bus("11111111", 50, 75.0, "Diesel");  
-        
-        assertThrows(IllegalArgumentException.class, () -> {
-            bus.setBusID("12345678");  
+// Unit test Case 5: Test that duplicate busID will be rejected and not allowed
+@Test
+public void testDuplicateBusID() throws IOException {
+    // 11111111 already exists in the file from setUp
+    Bus duplicateBus = new Bus("11111111", 50, 75.0, "Diesel");
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        new BusRepository().addBus(duplicateBus);
     });
 }
     // Condition B2: busCapacity cannot increase during update operations. However, it can decrease

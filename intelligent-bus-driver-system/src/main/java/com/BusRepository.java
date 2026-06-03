@@ -32,12 +32,15 @@ public class BusRepository {
             try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
                 String line;
 
-                // Loop through every entry in the file
-                while ((line = reader.readLine()) != null) {
-                    if (line.isBlank()) continue;
+ while ((line = reader.readLine()) != null) {
+    if (line.isBlank()) continue;
 
-                    // Extract just the ID from this line for comparison
-                    String existingID = line.split(",")[0].split(" ")[1].trim();
+    String[] parts = line.trim().split(",");
+    // Make sure we have enough parts before trying to parse
+    if (parts.length < 4) continue;
+
+    // Extract just the ID from this line for comparison
+    String existingID = parts[0].split(" ")[1].trim();
 
                     // If a duplicate ID is found, deny the add and throw
                     if (existingID.equals(bus.getBusID())) {
@@ -54,13 +57,33 @@ public class BusRepository {
         double fuelLevel = bus.getFuelLevel();
         String fuelType  = bus.getFuelType();
 
-        // Write the variables to the file in the expected format
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
-            writer.write("busID " + busID +
-                         ",capacity " + capacity +
-                         ",fuelLevel " + fuelLevel +
-                         ",fuelType " + fuelType);
-            writer.newLine();
+        // Read existing lines
+        List<String> lines = new ArrayList<>();
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.isBlank()) {
+                        lines.add(line);
+                    }
+                }
+            }
+        }
+
+        // Add the new bus entry
+        lines.add("busID " + busID +
+                  ",capacity " + capacity +
+                  ",fuelLevel " + fuelLevel +
+                  ",fuelType " + fuelType);
+
+        // Write all lines back without trailing newline
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, false))) {
+            for (int i = 0; i < lines.size(); i++) {
+                writer.write(lines.get(i));
+                if (i < lines.size() - 1) {
+                    writer.newLine();
+                }
+            }
         }
 
         return true;
@@ -85,7 +108,7 @@ public class BusRepository {
                 if (line.isBlank()) continue;
 
                 // Split the line by comma to get each field
-                String[] parts = line.split(",");
+                String[] parts = line.trim().split(",");
 
                 // Extract the value after the space for each field
                 String id        = parts[0].split(" ")[1].trim();
@@ -220,9 +243,11 @@ public class BusRepository {
 
         // Rewrite the entire file with the updated lines
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, false))) {
-            for (String l : allLines) {
-                writer.write(l);
-                writer.newLine();
+            for (int i = 0; i < allLines.size(); i++) {
+                writer.write(allLines.get(i));
+                if (i < allLines.size() - 1) {
+                    writer.newLine();
+                }
             }
         }
 

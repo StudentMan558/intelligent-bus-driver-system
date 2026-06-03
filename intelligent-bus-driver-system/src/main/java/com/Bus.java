@@ -57,7 +57,7 @@ public class Bus {
     // Helper method to check if a busID already exists in the file (B1.1)
     private boolean busIDExists(String busString) {
 
-    String busesData = "data/buses.txt";
+    String busesData = "data\\buses.txt";
 
     try (Stream<String> stream = Files.lines(Paths.get(busesData))) {
 

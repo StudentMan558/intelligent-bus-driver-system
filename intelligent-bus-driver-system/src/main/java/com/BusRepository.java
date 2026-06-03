@@ -1,10 +1,10 @@
 package com;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BusRepository {
 
-    private static final String FILE_PATH = "data\\buses.txt";
+    private static final String FILE_PATH = "data/buses.txt";
 
     public BusRepository() {}
 

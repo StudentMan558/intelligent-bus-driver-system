@@ -1,13 +1,25 @@
 package com;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.io.IOException;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class BusUnitTest {
+    
+    @BeforeEach
+    public void setUp() throws IOException {
+        // Ensure data directory exists
+        Files.createDirectories(Paths.get("data"));
+        
+        // Initialize buses.txt with test data before each test
+        String testData = "busID 11111111,capacity 30,fuelLevel 55.0,fuelType Hybrid";
+        Files.write(Paths.get("data/buses.txt"), testData.getBytes());
+    }
     
     // Condition B1: busID must be unique. Duplicate bus IDs are not allowed and the busID must be exactly 8 characters long (all characters are digits)
     // Unit test Case 1: Test that a valid 8-digit busID is accepted (e.g., "12345678")

@@ -1,1 +1,0 @@
-busID 12345678, capacity 200, fuelLevel 50L, fuelType diesel

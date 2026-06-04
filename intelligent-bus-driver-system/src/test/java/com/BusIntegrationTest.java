@@ -1,12 +1,13 @@
 package com;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Integration tests for BusRepository.
@@ -20,6 +21,16 @@ import java.nio.file.Paths;
 public class BusIntegrationTest {
 
     private BusRepository busRepository = new BusRepository();
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        // Ensure data directory exists
+        Files.createDirectories(Paths.get("data"));
+        
+        // Initialize buses.txt with the pre-existing line 1 entry before each test, additionally adds a second entry
+        String testData = "busID 11111111,capacity 50,fuelLevel 90.0,fuelType Diesel";
+        Files.write(Paths.get("data/buses.txt"), testData.getBytes());
+    }
 
     // ─── ADD TESTS ───────────────────────────────────────────────────────────────
 
@@ -141,11 +152,21 @@ public class BusIntegrationTest {
      * Test 7 - countBus success:
      * Verifies the count increases correctly after adding a new entry.
      */
-    // @Test
-    void testCountBusSuccess() throws IOException {
+    @Test
+    void testCountBusSuccess() throws IOException {        
+        // Verify initial count is 1 (only the pre-existing bus)
+
+        // Setting InitialCount = 1
+        int initialCount = busRepository.countBus();
+        assertEquals(1, initialCount, "Initial count should be 1");
+
         // Add a new bus
         Bus newBus = new Bus("99999999", 30, 60.0, "Hybrid");
         busRepository.addBus(newBus);
+
+        // Verify the count increased to 2
+        int updatedCount = busRepository.countBus();
+        assertEquals(2, updatedCount, "Count should increase to 2 after adding a bus");
 
         // Retrieve it to confirm it was added correctly
         Bus retrieved = busRepository.retrieveBus("99999999");
@@ -153,5 +174,7 @@ public class BusIntegrationTest {
         assertEquals(30, retrieved.getCapacity());
         assertEquals(60.0, retrieved.getFuelLevel());
         assertEquals("Hybrid", retrieved.getFuelType());
+
     }
+
 }

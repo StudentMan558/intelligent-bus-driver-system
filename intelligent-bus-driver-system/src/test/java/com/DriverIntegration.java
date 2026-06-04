@@ -1,11 +1,13 @@
 package com;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 /**
  * Driver Integration Tests to ensure that the Driver class and DriverRepository work together correctly, especially with file persistence
  * @author [Jake Mastandrea - S4176874]
@@ -100,7 +102,7 @@ public class DriverIntegration {
     @Test
     public void testDynamicVideoUpdate() throws IOException {
         DriverRepository repo = new DriverRepository();
-        String videoDriverID = "88!@videoXX"; // Our dedicated pre-existing driver
+        String videoDriverID = "88!@videXX"; // Our dedicated pre-existing driver
 
         // 1. ENSURE PRE-EXISTING ENTRY EXISTS
         // If the file is empty, this adds the "past entry" so there is something to edit.

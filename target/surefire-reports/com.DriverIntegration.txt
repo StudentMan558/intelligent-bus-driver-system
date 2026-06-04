@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.DriverUnitTest
+Test set: com.DriverIntegration
 -------------------------------------------------------------------------------
-Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 s -- in com.DriverUnitTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.329 s -- in com.DriverIntegration

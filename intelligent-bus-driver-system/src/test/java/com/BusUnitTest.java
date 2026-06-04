@@ -1,10 +1,25 @@
 package com;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class BusUnitTest {
+    
+    @BeforeEach
+    public void setUp() throws IOException {
+        // Ensure data directory exists
+        Files.createDirectories(Paths.get("data"));
+        
+        // Initialize buses.txt with test data before each test
+        String testData = "busID 11111111,capacity 30,fuelLevel 55.0,fuelType Hybrid";
+        Files.write(Paths.get("data/buses.txt"), testData.getBytes());
+    }
     
     // Condition B1: busID must be unique. Duplicate bus IDs are not allowed and the busID must be exactly 8 characters long (all characters are digits)
     // Unit test Case 1: Test that a valid 8-digit busID is accepted (e.g., "12345678")
@@ -51,12 +66,14 @@ public class BusUnitTest {
 }
 
     // Unit test Case 5: Test that duplicate busID will be rejected and not allowed (e.g., if '12345678' is already used, will not allow '12345678' again.)
-    @Test
-    public void testDuplicateBusID() {
-        Bus bus = new Bus("11111111", 50, 75.0, "Diesel");  
-        
-        assertThrows(IllegalArgumentException.class, () -> {
-            bus.setBusID("12345678");  
+// Unit test Case 5: Test that duplicate busID will be rejected and not allowed
+@Test
+public void testDuplicateBusID() throws IOException {
+    // 11111111 already exists in the file from setUp
+    Bus duplicateBus = new Bus("11111111", 50, 75.0, "Diesel");
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        new BusRepository().addBus(duplicateBus);
     });
 }
     // Condition B2: busCapacity cannot increase during update operations. However, it can decrease

@@ -12,7 +12,7 @@ import java.io.PrintWriter;
  */
 public class DriverIntegration {
 
-    // This runs before all tests to ensure clean slate
+    // This runs before all tests to ensure clean slate, comment out for video to preserve dynamic entry
     @BeforeEach
     public void setup() {
         try (PrintWriter writer = new PrintWriter("data/drivers.txt")) {
@@ -95,5 +95,33 @@ public class DriverIntegration {
         
         assertNotNull(retrieved, "A new repository instance should be able to read data saved by a previous instance.");
         assertEquals("Thomas Smith", retrieved.getName(), "Data consistency should be maintained across repository instances.");
+    }
+    
+    @Test
+    public void testDynamicVideoUpdate() throws IOException {
+        DriverRepository repo = new DriverRepository();
+        String videoDriverID = "88!@videoXX"; // Our dedicated pre-existing driver
+
+        // 1. ENSURE PRE-EXISTING ENTRY EXISTS
+        // If the file is empty, this adds the "past entry" so there is something to edit.
+        if (repo.retrieve(videoDriverID) == null) {
+            Driver pastEntry = new Driver(videoDriverID, "Demo Driver", 15, "Light", "1|Old St|Altona|VIC|Australia", "01-01-2000");
+            repo.add(pastEntry);
+        }
+
+        // 2. CREATE A DYNAMIC UPDATE USING THE CLOCK
+        // This grabs your computer's live time (e.g., "10:51:23")
+        String liveTime = java.time.LocalTime.now().withNano(0).toString(); 
+        
+        // We inject the live time into the new address
+        String dynamicAddress = "1|Updated At " + liveTime + "|Altona|VIC|Australia";
+        Driver updatedEntry = new Driver(videoDriverID, "Demo Driver", 15, "Heavy", dynamicAddress, "01-01-2000");
+
+        // 3. EDIT THE PAST ENTRY
+        repo.update(updatedEntry);
+
+        // 4. VERIFY
+        Driver retrieved = repo.retrieve(videoDriverID);
+        assertEquals(dynamicAddress, retrieved.getAddress(), "The file should now contain the live time stamp!");
     }
 }
